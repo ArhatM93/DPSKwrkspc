@@ -1,0 +1,94 @@
+{
+  // Задачи DSH для VS Code.
+  // Требуется, чтобы команда `dsh` была в PATH (добавлена в пользовательский PATH).
+  // Если VS Code был запущен до изменения PATH — перезапустите его,
+  // иначе `dsh` в задачах не найдётся.
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // Агент прямо в терминале, в этом же каталоге (там же лежит AGENTS.md).
+      "label": "DSH: агент в терминале (tui)",
+      "detail": "Интерактивный агент в терминале, рабочий каталог — корень проекта",
+      "type": "shell",
+      "command": "dsh",
+      "args": ["tui"],
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "dedicated",
+        "group": "dsh",
+        "reveal": "always",
+        "focus": true
+      },
+      "icon": {
+        "id": "terminal",
+        "color": "terminal.ansiCyan"
+      }
+    },
+    {
+      // Веб-интерфейс агента рядом с редактором.
+      "label": "DSH: веб-интерфейс (web)",
+      "detail": "Поднимает веб-интерфейс dsh; адрес печатается в терминале",
+      "type": "shell",
+      "command": "dsh",
+      "args": ["web"],
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "dedicated",
+        "group": "dsh",
+        "reveal": "always",
+        "focus": false
+      },
+      "icon": {
+        "id": "globe",
+        "color": "terminal.ansiBlue"
+      }
+    },
+    {
+      // Одна задача без интерактива: спросит текст и вернёт результат.
+      "label": "DSH: одна задача (headless)",
+      "detail": "Отправить одну задачу агенту и получить ответ без интерактивной сессии",
+      "type": "shell",
+      "command": "dsh",
+      "args": ["headless", "${input:dshTask}"],
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "dedicated",
+        "group": "dsh",
+        "reveal": "always",
+        "focus": true
+      },
+      "icon": {
+        "id": "run",
+        "color": "terminal.ansiGreen"
+      }
+    },
+    {
+      // Одновременный запуск: терминальный агент и веб-интерфейс сразу, в одном окне.
+      // Это задача по умолчанию для сборки — Ctrl+Shift+B.
+      "label": "DSH: запустить одновременно (tui + web)",
+      "detail": "Запускает терминального агента и веб-интерфейс параллельно, в разных панелях терминала",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+        "DSH: агент в терминале (tui)",
+        "DSH: веб-интерфейс (web)"
+      ],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "icon": {
+        "id": "play",
+        "color": "terminal.ansiYellow"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "dshTask",
+      "type": "promptString",
+      "description": "Задача для агента",
+      "default": ""
+    }
+  ]
+}
